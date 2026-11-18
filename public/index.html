@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#1d2b53">
+  <title>Gartic da Física</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TELA INICIAL -->
+<section id="tela-inicio" class="tela ativa">
+  <div class="cartao inicio">
+    <div class="logo">
+      <span class="logo-icone">✏️⚛️</span>
+      <h1>Gartic <em>da Física</em></h1>
+      <p class="sub">Desenhe e adivinhe conceitos de Física</p>
+    </div>
+
+    <label class="rotulo">Escolha sua turma</label>
+    <div id="turmas" class="turmas">
+      <button type="button" class="turma" data-serie="1"><strong>1ª série</strong><small>Ensino Médio</small></button>
+      <button type="button" class="turma" data-serie="2"><strong>2ª série</strong><small>Ensino Médio</small></button>
+    </div>
+    <div id="temas-previa" class="temas-previa"></div>
+
+    <label class="rotulo" for="nome">Seu nome</label>
+    <input id="nome" maxlength="16" placeholder="Ex.: Ana" autocomplete="off">
+
+    <label class="rotulo" for="sala">Código da sala <small>(ex.: 1A, 2B — todos da turma usam o mesmo)</small></label>
+    <input id="sala" maxlength="8" placeholder="Ex.: 1A" autocomplete="off">
+
+    <button id="btn-entrar" class="btn grande">Entrar</button>
+    <p id="erro-inicio" class="erro"></p>
+  </div>
+</section>
+
+<!-- SALA DE ESPERA -->
+<section id="tela-espera" class="tela">
+  <div class="espera">
+    <header class="cab">
+      <div>
+        <div class="etiqueta" id="esp-turma"></div>
+        <h2>Sala <span id="esp-sala"></span></h2>
+      </div>
+      <button class="btn fantasma pequeno" id="btn-sair">Sair</button>
+    </header>
+
+    <div class="grade-espera">
+      <div class="cartao">
+        <h3>Jogadores <span id="esp-qtd" class="contador"></span></h3>
+        <ul id="esp-jogadores" class="lista-jog"></ul>
+        <p id="esp-aviso" class="aviso"></p>
+      </div>
+
+      <div class="cartao">
+        <h3>Configurações</h3>
+        <div id="cfg-host">
+          <label class="rotulo">Temas</label>
+          <div id="cfg-temas" class="checks"></div>
+          <div class="linha">
+            <div>
+              <label class="rotulo" for="cfg-rodadas">Rodadas</label>
+              <select id="cfg-rodadas"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>
+            </div>
+            <div>
+              <label class="rotulo" for="cfg-tempo">Tempo para desenhar</label>
+              <select id="cfg-tempo"><option value="45">45 s</option><option value="60">60 s</option><option value="80" selected>80 s</option><option value="100">100 s</option><option value="120">120 s</option></select>
+            </div>
+          </div>
+          <button id="btn-iniciar" class="btn grande">Começar jogo</button>
+        </div>
+        <div id="cfg-convidado" class="resumo-cfg"></div>
+      </div>
+
+      <div class="cartao convite">
+        <h3>Chame a turma</h3>
+        <img id="qr" alt="QR code para entrar na sala">
+        <p class="link" id="link-convite"></p>
+        <p class="dica-peq">Aponte a câmera do celular para o QR code ou digite o endereço acima.</p>
+      </div>
+    </div>
+
+    <div class="cartao chat-espera">
+      <ul id="msgs-espera" class="mensagens"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- JOGO -->
+<section id="tela-jogo" class="tela">
+  <div class="jogo">
+    <header class="barra">
+      <div class="rodada" id="j-rodada"></div>
+      <div class="palavra" id="j-palavra"></div>
+      <div class="relogio" id="j-relogio">0</div>
+    </header>
+    <div class="tema-atual" id="j-tema"></div>
+
+    <div class="area">
+      <div class="quadro-wrap">
+        <canvas id="quadro" width="800" height="600"></canvas>
+        <div id="sobre-escolha" class="sobre"></div>
+        <div id="sobre-revela" class="sobre"></div>
+      </div>
+
+      <div id="ferramentas" class="ferramentas">
+        <div class="cores" id="cores"></div>
+        <div class="tamanhos">
+          <button class="tam ativo" data-w="4"><i style="width:6px;height:6px"></i></button>
+          <button class="tam" data-w="10"><i style="width:12px;height:12px"></i></button>
+          <button class="tam" data-w="22"><i style="width:20px;height:20px"></i></button>
+        </div>
+        <div class="acoes">
+          <button id="f-borracha" class="ferr" title="Borracha">🧽</button>
+          <button id="f-desfazer" class="ferr" title="Desfazer">↩️</button>
+          <button id="f-limpar" class="ferr" title="Limpar tudo">🗑️</button>
+        </div>
+      </div>
+
+      <div class="lado">
+        <div id="placar" class="placar"></div>
+        <ul id="msgs-jogo" class="mensagens"></ul>
+        <form id="form-palpite" class="palpite">
+          <input id="palpite" maxlength="60" placeholder="Digite seu palpite..." autocomplete="off">
+          <button class="btn">Enviar</button>
+        </form>
+        <button id="btn-pular" class="btn fantasma pequeno host-only">Pular esta vez</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIM -->
+<section id="tela-fim" class="tela">
+  <div class="cartao fim">
+    <h2>🏆 Fim de jogo!</h2>
+    <div id="podio" class="podio"></div>
+    <ol id="ranking" class="ranking"></ol>
+    <button id="btn-novamente" class="btn grande host-only">Voltar para a sala</button>
+    <p class="dica-peq convidado-only">Aguarde o anfitrião iniciar uma nova partida.</p>
+  </div>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
